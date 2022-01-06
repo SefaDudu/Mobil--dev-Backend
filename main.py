@@ -7,7 +7,7 @@ import pymongo
 from bson.json_util import ObjectId, dumps
 from bson import json_util
 import json
-import bcrypt
+
 
 
 @app.route('/api/login',methods=['POST','GET'])
@@ -20,9 +20,8 @@ def login():
         p=i["password"]
         r=i["role"]
 
-    if not isinstance(p, bytes):
-            p = p.encode('utf-8')
-    if bcrypt.hashpw(password.encode('utf8'),p)==p:
+  
+    if password==p:
         return{"username":username,"role":r}
 
 
@@ -34,7 +33,6 @@ class ObjectIdEncoder(json.JSONEncoder):
         return super(ObjectIdEncoder, self).default(obj)
 
 app = Flask(name)
-app.secret_key = 'secretsecretmysecretkeysecret'
 app.json_encoder = ObjectIdEncoder
 
 myclient = pymongo.MongoClient("mongodb://localhost:27017/")
